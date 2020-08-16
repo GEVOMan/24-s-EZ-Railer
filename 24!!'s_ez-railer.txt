@@ -1,0 +1,161 @@
+@name 24!!'s EZ-Railer V1.1
+@inputs WheelsUp 
+#[ 
+
+#made by 24!!
+
+Welcome to 24!!'s EZ-Railer e2.
+This e2 was made to conveniently convert a regular simfphys vehicle to a High-Railer vehicle.
+To use, configure e2 and then place on your simfphys vehicle (make sure to freeze it first), then refresh by pressing the R key on it with the Expression2 tool.
+Then, spawn a wire numpad input, choose the desired key and wire the WheelsUp input to the numpad input, and you're done!
+Config is set for the ATS Ford F-350 Utility truck by default. 
+]#
+
+##--------WARNING: This chip shall not be parented.
+
+
+#------------Config----------
+
+#-----General
+
+Edit = 0 #-----If edit is 1, bogey prop will be made visible to make positioning easier. 
+
+ChatHints = 1 #Enables/disables chat hints.
+
+Sounds = 1 #Enables/Disables sounds.
+
+#-----Hi-Rail
+
+FrontWheelPos = 0 #front holo wheel horizontal position
+
+FrontWheelHeight = 0 #front holo wheel height
+
+FrontWheelAng = 90 #front holo wheel angle
+
+RearWheelPos = 0 #rear holo wheel horizontal position
+
+RearWheelHeight = 0 #rear holo wheel height
+
+RearWheelAng = 90 #rear holo wheel angle
+
+BogeyAng= 0 #physical front wheel angle
+
+Bogey1Pos = 0 #physical bogey horizontal position
+
+Bogey2Pos = 0 #physical bogey horizontal position
+
+BogeyHeight = 0 #physical bogey height
+
+#----------Advanced users only----------
+
+E = entity():isWeldedTo()
+
+if(first()|dupefinished()){
+
+WheelsUp==1
+
+printColor(vec(0,255,0),"Welcome to 24!!'s EZ-Railer e2. Look in e2 for instructions and config.")
+    if(Edit){
+        if(ChatHints){
+        printColor(vec(255,191,0),"Edit Mode Active.")
+        }
+        if(Sounds){
+        soundPlay(0,0,"misc/talk.wav",0)
+        }
+    }elseif(!Edit){
+        if(ChatHints){
+        printColor(vec(0,150,0),"Ready for Operation.")
+        }
+        if(Sounds){
+        soundPlay(1,1,"player/taunt_bell.wav",0)
+        }
+    }
+}
+    if(WheelsUp==0){
+        P = propSpawn("models/bobsters_trains/wheels/standard/wheel_24_double.mdl",0)
+        P:propPhysicalMaterial("gmod_ice")
+        P:setPos(E:toWorld(vec(140+Bogey1Pos,0,-32.24)))
+        P:setAng(E:toWorld(ang(0,0+BogeyAng,0)))
+        weld(P,E)
+    
+        P2 = propSpawn("models/bobsters_trains/wheels/standard/wheel_24_double.mdl",0)
+        P2:propPhysicalMaterial("gmod_ice")
+        P2:setPos(E:toWorld(vec(-140-Bogey2Pos,0,-32.24)))
+        P2:setAng(E:toWorld(ang(0,0+BogeyAng,0)))
+        weld(P2,E)
+    }elseif(WheelsUp==1){
+    propDeleteAll()
+}
+
+if(!Edit){
+P:setAlpha(0)
+P:propFreeze(0)
+P2:setAlpha(0)
+P2:propFreeze(0)
+}
+
+if(Edit){
+P:propFreeze(1)
+P2:propFreeze(1)
+}
+
+#---------Holo Wheels----------
+
+#front
+A=15
+holoCreate(A,E:toWorld(vec(112+FrontWheelPos,0,-38.25+FrontWheelHeight)),vec(1.05,0.3,0.3))
+holoAng(A,E:toWorld(ang(0,FrontWheelAng,0)))
+holoModel(A,"models/props_metaladon/parts/wheelset_40.mdl")
+holoParent(A,E)
+
+A=16
+holoCreate(A,E:toWorld(vec(112+FrontWheelPos,-25,-23+FrontWheelHeight)),vec(1,1,5))
+holoAng(A,E:toWorld(ang(0,FrontWheelAng,0)))
+holoModel(A,"models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+holoMaterial(A,"models/proppertextures/wheel")
+holoParent(A,E)
+
+A=17
+holoCreate(A,E:toWorld(vec(112+FrontWheelPos,25,-23+FrontWheelHeight)),vec(1,1,5))
+holoAng(A,E:toWorld(ang(0,FrontWheelAng,0)))
+holoModel(A,"models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+holoMaterial(A,"models/proppertextures/wheel")
+holoParent(A,E)
+
+#rear
+A=18
+holoCreate(A,E:toWorld(vec(-115-RearWheelPos,0,-38.25+RearWheelHeight)),vec(1.05,0.3,0.3))
+holoAng(A,E:toWorld(ang(0,RearWheelAng,0)))
+holoModel(A,"models/props_metaladon/parts/wheelset_40.mdl")
+holoParent(A,E)
+
+A=19
+holoCreate(A,E:toWorld(vec(-115-RearWheelPos,-25,-23+RearWheelHeight)),vec(1,1,5))
+holoAng(A,E:toWorld(ang(0,RearWheelAng,0)))
+holoModel(A,"models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+holoMaterial(A,"models/proppertextures/wheel")
+holoParent(A,E)
+
+A=20
+holoCreate(A,E:toWorld(vec(-115-RearWheelPos,25,-23+RearWheelHeight)),vec(1,1,5))
+holoAng(A,E:toWorld(ang(0,RearWheelAng,0)))
+holoModel(A,"models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+holoMaterial(A,"models/proppertextures/wheel")
+holoParent(A,E)
+
+#----------wheel script
+
+if(WheelsUp==1){
+    holoPos(15,E:toWorld(vec(112+FrontWheelPos,0,-30.25+FrontWheelHeight)))
+    holoPos(16,E:toWorld(vec(112+FrontWheelPos,-25,-15+FrontWheelHeight)))
+    holoPos(17,E:toWorld(vec(112+FrontWheelPos,25,-15+FrontWheelHeight)))
+    holoAng(15,E:toWorld(ang(0,RearWheelAng,0)))
+    holoAng(16,E:toWorld(ang(0,RearWheelAng,0)))
+    holoAng(17,E:toWorld(ang(0,RearWheelAng,0))) 
+    holoPos(18,E:toWorld(vec(-115-RearWheelPos,0,-30.25+RearWheelHeight)))
+    holoPos(19,E:toWorld(vec(-115-RearWheelPos,-25,-15+RearWheelHeight)))
+    holoPos(20,E:toWorld(vec(-115-RearWheelPos,25,-15+RearWheelHeight)))
+    holoAng(18,E:toWorld(ang(0,RearWheelAng,0)))
+    holoAng(19,E:toWorld(ang(0,RearWheelAng,0)))
+    holoAng(20,E:toWorld(ang(0,RearWheelAng,0)))
+}
